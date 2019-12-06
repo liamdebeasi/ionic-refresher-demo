@@ -1,14 +1,68 @@
-<ion-header>
-  <ion-toolbar>
+<ion-header translucent>
+  <ion-toolbar color="dark">
     <ion-title>
-      Ionic Blank
+      Mailboxes
     </ion-title>
+    
+    <ion-buttons slot="end">
+      <ion-button color="primary">Edit</ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <div class="ion-padding">
-    The world is your oyster.
-    <p>If you get lost, the <a target="_blank" rel="noopener" href="https://ionicframework.com/docs/">docs</a> will be your guide.</p>
+<ion-content color="dark" fullscreen>
+  <ion-refresher slot="fixed" content-id="content" (ionRefresh)="refresh($event)">
+    <ion-refresher-content pulling-icon="lines" refreshing-spinner="lines" class="liam"></ion-refresher-content>
+  </ion-refresher>
+  
+  <div id="content">
+    <ion-header collapse="condense">
+      <ion-toolbar color="dark">
+        <ion-title size="large">Mailboxes</ion-title>
+      </ion-toolbar>
+    </ion-header>
+    
+    <ion-list class="account-list">
+      <ion-item *ngFor="let account of accounts" button class="account">
+        <ion-icon [name]="account.icon" slot="start" color="primary"></ion-icon>
+        <ion-label>{{ account.name }}</ion-label>
+        <div *ngIf="account.unreadCount" class="count">{{ account.unreadCount }}</div>
+      </ion-item>
+    </ion-list>
+    
+    <div *ngFor="let list of lists" class="inbox-list">
+      <div class="name">{{ list.name }}</div>
+      <ion-button slot="icon-only" class="arrow">
+        <ion-icon name="chevron-down"></ion-icon>
+      </ion-button>
+      
+      <div class="clear-both"></div>
+      
+      <ion-list class="list">      
+        <ion-item *ngFor="let item of list.items" button class="account">
+          <ion-icon [name]="item.icon" slot="start" color="primary"></ion-icon>
+          <ion-label>{{ item.name }}</ion-label>
+          <div *ngIf="item.unreadCount" class="count">{{ item.unreadCount }}</div>
+        </ion-item>
+      </ion-list>
+    </div>
   </div>
 </ion-content>
+
+<ion-footer translucent>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button slot="icon-only">
+        <ion-icon name=""></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    
+    <ion-title size="small">{{ getStatusText() }}</ion-title>
+    
+    <ion-buttons slot="end">
+      <ion-button slot="icon-only">
+        <ion-icon name="create"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-footer>
